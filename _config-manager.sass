@@ -1,0 +1,24 @@
+$-config-storage         : () !default !global
+$-config-storage-default : () !default !global
+
+@import ./config-manager-utils
+
+
+
+=config-set($key, $value, $default: false)
+  @if $default
+    $-config-storage-default: -config-map-set($-config-storage-default, $key, $value) !global
+  @else
+    $-config-storage:         -config-map-set($-config-storage,         $key, $value) !global
+
+
+
+=config-remove($paths, $default: false)
+  @if length($paths) == 1
+    $settings: nth($paths, 1)
+
+  @each $path in $paths
+    @if $default
+      $-config-storage-default: map-remove($-config-storage-default, $path) !global
+    @else
+      $-config-storage:         map-remove($-config-storage,         $path) !global

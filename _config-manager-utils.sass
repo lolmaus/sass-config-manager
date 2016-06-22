@@ -1,0 +1,164 @@
+@function -config-str-split($string, $delimiter: "")
+  $result: ()
+  $length: str-length($string)
+
+  @if str-length($delimiter) == 0
+    @for $i from 1 through $length
+      $result: append($result, str-slice($string, $i, $i))
+    @return $result
+
+  $break: false
+
+  @while not $break
+    $index: str-index($string, $delimiter)
+    @if not $index or $index == 0
+      $break: true
+    @else
+      $part:   if($index != 1, str-slice($string, 1, $index - 1), "")
+      $result: append($result, $part)
+      $string: str-slice($string, $index + str-length($delimiter))
+
+  @return append($result, $string)
+
+
+
+
+@function -config-list-map-check($list)
+  @if length($list) == 2 and length(nth($list, 1)) == 1
+    @return append((), $list, "comma")
+  @return $list
+
+
+
+
+@function -config-map-has($map, $key)
+  $keys:  -config-str-split($key, '.')
+  $value: -config-list-map-check($map)
+
+  @each $key in $keys
+    @if type-of($value) != "map" or not map-has-key($value, $key)
+      @return false
+
+    $value: map-get($value, $key)
+
+  @return true
+
+
+
+
+@function -config-map-get($map, $path)
+  $keys:  -config-str-split($path, '.')
+  $value: -config-list-map-check($map)
+
+  @each $key in $keys
+    @if type-of($value) != "map" or not map-has-key($value, $key)
+      @warn "config-get: path '#{$path}' doesn\'t exist."
+      @return null
+
+    $value: map-get($value, $key)
+
+  @return $value
+
+
+
+
+@function -config-str-join($list, $delimiter: "")
+  $result: ""
+
+  @if length($list) == 0
+    @return $result
+
+  @if length($list) > 1
+    @for $i from 1 through length($list) - 1
+      $result: $result + nth($list, $i) + $delimiter
+
+  @return $result + nth($list, length($list))
+
+
+
+
+@function -config-list-slice($list, $start: 1, $end: length($list))
+  $output: ()
+
+  @if $start >= 1 and $end >= $start
+    @for $i from $start through $end
+      $output: append($output, nth($list, $i))
+
+  @return $output
+
+
+
+
+@function -config-map-merge($maps...)
+  $result: nth($maps, 1)
+
+  @for $i from 1 through length($maps) - 1
+    @each $key, $value in nth($maps, $i + 1)
+      @if type-of($result) != "map"
+        $result: ($key: $value)
+      @if type-of($value) == "map"
+        $value: -config-map-merge(map-get($result, $key), $value)
+      @if $key != null
+        $result: map-merge($result, ($key: $value))
+
+  @return $result
+
+
+
+
+@function -config-map-set($map, $path, $value)
+  $map:    -config-list-map-check($map)
+  $keys:   -config-str-split($path, '.')
+  $length: length($keys)
+  $result: (nth($keys, $length): $value)
+
+  @if $length > 1
+    @for $i from 1 through $length - 1
+      $path: ""
+      $key: nth($keys, 1)
+      $j: $length - $i
+      $key: nth($keys, $j)
+      $path: -config-str-join(-config-list-slice($keys, 1, $j), '.')
+
+      @if -config-map-has($map, $path)
+        $value: -config-map-get($map, $path)
+
+        @if type-of($value) == "map"
+          $result: -config-map-merge(($key: $value), ($key: $result))
+        @else
+          $result: ($key: $result)
+
+      @else
+        $result: ($key: $result)
+
+  @return -config-map-merge($map, $result)
+
+
+
+
+@function config-get($key, $default: false)
+
+  @if $default
+    @if -config-map-has($-config-storage-default, $key)
+      @return -config-map-get($-config-storage-default, $key)
+
+
+  @else
+    @if -config-map-has($-config-storage, $key)
+      @return -config-map-get($-config-storage, $key)
+
+    @else if -config-map-has($-config-storage-default, $key)
+      @return -config-map-get($-config-storage-default, $key)
+
+
+  @warn "config-get: key '#{$key}' doesn't exist."
+  @return null
+
+
+
+
+@function config-has($key)
+  @if -config-map-has($-config-storage, $key) or -config-map-has($-config-storage-default, $key)
+    @return true
+
+  @return false

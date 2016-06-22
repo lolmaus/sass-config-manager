@@ -1,0 +1,42 @@
+sass-config-manager-mk2
+=======================
+
+Put the jumble of configuration variables to order: store all your configuration in a nested hash (Sass map). Access it and manipulate it using handy utils.
+
+
+Mark 2
+------
+
+This project is a refactoring of the beautiful [sass-config-manager](https://github.com/sass-projects/sass-config-manager).
+
+
+### Reasons to fork
+
+1. As of June 2016, **sass-config-manager** was not compatible with **libsass** 3.3.3+.
+2. **sass-config-manager** implementation of global/local choice is messy. Using two distinct import endpoints makes the code cleaner.
+3. I find customization of namespace and delimiter to be needless features. They are removed in **mk2** for simpler source.
+4. **sass-config-manager** uses a crazy Grunt pipeline. I find it completely unnecessary because Sass supports `@import`.
+5. All variables, functions and mixins defined by **mk2** start with `config-` or `-config-`, which reduces the risk of naming collisions.
+
+
+### Design decisions
+
+* **mk2** is written with the indentation-driven `.sass` syntax. Way less visual noise! You can still import it into `.scss` code.
+* The `config-get` mixin and `config-set` function have been removed for simplicity. Use the `config-get` function and `config-set` mixin.
+
+**mk2** is currently missing tests and inline docs. They are to be added later.
+
+-- Andrey Mikhaylov (@lolmaus)
+
+
+
+Credits
+-------
+
+Contains code from [sass-config-manager](https://github.com/sass-projects/sass-config-manager) created by Daniel Bannert ([@prisis](https://github.com/prisis)) and [contributors](https://github.com/sass-projects/sass-config-manager/graphs/contributors).
+
+
+License
+-------
+
+MIT license (see LICENSE.md).
