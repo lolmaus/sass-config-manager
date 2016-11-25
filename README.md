@@ -1,6 +1,8 @@
 sass-config-manager-mk2
 =======================
 
+[![npm](https://img.shields.io/npm/v/sass-config-manager-mk2.svg)](sass-config-manager-mk2)
+
 Put the jumble of configuration variables to order: store all your configuration in a nested hash (Sass map). Access it and manipulate it using handy utils.
 
 
@@ -42,7 +44,7 @@ Roadmap
 * :white_circle: Tests using [True](http://oddbird.net/true/) and [Mocha](https://mochajs.org/).
 * :white_circle: Inline documentation using [SassDoc](http://sassdoc.com/).
 * :white_circle: Bower package.
-* :white_circle: npm package.
+* :black_circle: npm package.
 * :white_circle: [Eyeglass](https://github.com/sass-eyeglass/eyeglass) support.
 
 
