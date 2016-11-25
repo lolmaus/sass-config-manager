@@ -1,0 +1,43 @@
+{
+  "name": "sass-config-manager-mk2",
+  "version": "1.0.0-alpha.1",
+  "description": "Lightweight yet efficient configuration storage for Sass",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lolmaus/sass-config-manager-mk2.git"
+  },
+  "keywords": [
+    "sass",
+    "config",
+    "manager",
+    "sass-config-manager",
+    "sass-config",
+    "sass",
+    "config",
+    "sass-configuration",
+    "sass",
+    "configuration",
+    "configuration",
+    "configuration",
+    "manager",
+    "configuration-manager",
+    "variables",
+    "map",
+    "sass-map",
+    "sass-variables",
+    "sass",
+    "map",
+    "sass",
+    "variables"
+  ],
+  "author": "Andrey Mikhaylov (lolmaus)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lolmaus/sass-config-manager-mk2/issues"
+  },
+  "homepage": "https://github.com/lolmaus/sass-config-manager-mk2#readme"
+}
